@@ -31,21 +31,25 @@ public class SwiftAwareframeworkConnectivityPlugin: AwareFlutterPluginCore, Flut
 
     public static func register(with registrar: FlutterPluginRegistrar) {
         let instance = SwiftAwareframeworkConnectivityPlugin()
-        // add own channel
-        super.setChannels(with: registrar,
-                          instance: instance,
-                          methodChannelName: "awareframework_connectivity/method",
-                          eventChannelName: "awareframework_connectivity/event")
-
-        let names = ["on_internet_on",  "on_internet_off",
-                     "on_gps_on",       "on_gps_off",
-                     "on_bluetooth_on", "on_bluetooth_off",
-                     "on_background_refresh_on", "on_background_refresh_off",
-                     "on_low_power_mode_on",     "on_low_power_mode_off",
-                     "on_push_notification_on",  "on_push_notification_off",
-                     "on_wifi_on",       "on_wifi_off"]
-        setEventChennels(instance:instance, names:names, registrar:registrar)
         
+        super.setMethodChannel(with: registrar, instance: instance, channelName: "awareframework_connectivity/method")
+        
+        let eventChannels = ["awareframework_connectivity/event",
+                             "awareframework_connectivity/event_on_internet_on",
+                             "awareframework_connectivity/event_on_internet_off",
+                             "awareframework_connectivity/event_on_gps_on",
+                             "awareframework_connectivity/event_on_gps_off",
+                             "awareframework_connectivity/event_on_bluetooth_on",
+                             "awareframework_connectivity/event_on_bluetooth_off",
+                             "awareframework_connectivity/event_on_background_refresh_on",
+                             "awareframework_connectivity/event_on_background_refresh_off",
+                             "awareframework_connectivity/event_on_low_power_mode_on",
+                             "awareframework_connectivity/event_on_low_power_mode_off",
+                             "awareframework_connectivity/event_on_push_notification_on",
+                             "awareframework_connectivity/event_on_push_notification_off",
+                             "awareframework_connectivity/event_on_wifi_on",
+                             "awareframework_connectivity/event_on_wifi_off"]
+        super.setEventChannels(with: registrar, instance: instance, channelNames: eventChannels)
     }
 
     public static func setEventChennels(instance:FlutterPlugin & FlutterStreamHandler, names:[String], registrar: FlutterPluginRegistrar){
@@ -57,86 +61,114 @@ public class SwiftAwareframeworkConnectivityPlugin: AwareFlutterPluginCore, Flut
     
     
     public func onInternetON() {
-        if let handler = self.getStreamHandler(name: "on_internet_on") {
-            handler.eventSink(nil)
+        if let handlers = self.getStreamHandlers(name: "on_internet_on") {
+            for handler in handlers {
+                handler.eventSink(nil)
+            }
         }
     }
     
     public func onInternetOFF() {
-        if let handler = self.getStreamHandler(name: "on_internet_off") {
-            handler.eventSink(nil)
+        if let handlers = self.getStreamHandlers(name: "on_internet_off") {
+            for handler in handlers {
+                handler.eventSink(nil)
+            }
         }
     }
     
     public func onGPSON() {
-        if let handler = self.getStreamHandler(name: "on_gps_on") {
-            handler.eventSink(nil)
+        if let handlers = self.getStreamHandlers(name: "on_gps_on") {
+            for handler in handlers {
+                handler.eventSink(nil)
+            }
         }
     }
     
     public func onGPSOFF() {
-        if let handler = self.getStreamHandler(name: "on_gps_off") {
-            handler.eventSink(nil)
+        if let handlers = self.getStreamHandlers(name: "on_gps_off") {
+            for handler in handlers {
+                handler.eventSink(nil)
+            }
         }
     }
     
     public func onBluetoothON() {
-        if let handler = self.getStreamHandler(name: "on_bluetooth_on") {
-            handler.eventSink(nil)
+        if let handlers = self.getStreamHandlers(name: "on_bluetooth_on") {
+            for handler in handlers {
+                handler.eventSink(nil)
+            }
         }
     }
     
     public func onBluetoothOFF() {
-        if let handler = self.getStreamHandler(name: "on_bluetooth_off") {
-            handler.eventSink(nil)
+        if let handlers = self.getStreamHandlers(name: "on_bluetooth_off") {
+            for handler in handlers {
+                handler.eventSink(nil)
+            }
         }
     }
     
     public func onBackgroundRefreshON() {
-        if let handler = self.getStreamHandler(name: "on_background_refresh_on") {
-            handler.eventSink(nil)
+        if let handlers = self.getStreamHandlers(name: "on_background_refresh_on") {
+            for handler in handlers {
+                handler.eventSink(nil)
+            }
         }
     }
     
     public func onBackgroundRefreshOFF() {
-        if let handler = self.getStreamHandler(name: "on_background_refresh_off") {
-            handler.eventSink(nil)
+        if let handlers = self.getStreamHandlers(name: "on_background_refresh_off") {
+            for handler in handlers {
+                handler.eventSink(nil)
+            }
         }
     }
     
     public func onLowPowerModeON() {
-        if let handler = self.getStreamHandler(name:  "on_low_power_mode_on") {
-            handler.eventSink(nil)
+        if let handlers = self.getStreamHandlers(name:  "on_low_power_mode_on") {
+            for handler in handlers {
+                handler.eventSink(nil)
+            }
         }
     }
     
     public func onLowPowerModeOFF() {
-        if let handler = self.getStreamHandler(name: "on_low_power_mode_off") {
-            handler.eventSink(nil)
+        if let handlers = self.getStreamHandlers(name: "on_low_power_mode_off") {
+            for handler in handlers {
+                handler.eventSink(nil)
+            }
         }
     }
     
     public func onPushNotificationOn() {
-        if let handler = self.getStreamHandler(name: "on_push_notification_on") {
-            handler.eventSink(nil)
+        if let handlers = self.getStreamHandlers(name: "on_push_notification_on") {
+            for handler in handlers {
+                handler.eventSink(nil)
+            }
         }
     }
     
     public func onPushNotificationOff() {
-        if let handler = self.getStreamHandler(name: "on_push_notification_off") {
-            handler.eventSink(nil)
+        if let handlers = self.getStreamHandlers(name: "on_push_notification_off") {
+            for handler in handlers {
+                handler.eventSink(nil)
+            }
         }
     }
     
     public func onWiFiON() {
-        if let handler = self.getStreamHandler(name: "on_wifi_on") {
-            handler.eventSink(nil)
+        if let handlers = self.getStreamHandlers(name: "on_wifi_on") {
+            for handler in handlers {
+                handler.eventSink(nil)
+            }
         }
     }
     
     public func onWiFiOFF() {
-        if let handler = self.getStreamHandler(name: "on_wifi_off") {
-            handler.eventSink(nil)
+        if let handlers = self.getStreamHandlers(name: "on_wifi_off") {
+            for handler in handlers {
+                handler.eventSink(nil)
+            }
         }
     }
 }

@@ -11,103 +11,100 @@ class ConnectivitySensor extends AwareSensorCore {
   static const MethodChannel _connectivityMethod = const MethodChannel('awareframework_connectivity/method');
   static const EventChannel  _connectivityStream  = const EventChannel('awareframework_connectivity/event');
 
-  static const EventChannel  _onInternetOnStream  = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys._onInternetOn);
-  static const EventChannel  _onInternetOffStream  = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys._onInternetOff);
+  static const EventChannel  _onInternetOnStream  = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys.onInternetOn);
+  static const EventChannel  _onInternetOffStream  = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys.onInternetOff);
 
-  static const EventChannel  _onGPSOnStream  = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys._onGPSOn);
-  static const EventChannel  _onGPSOffStream  = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys._onGPSOff);
+  static const EventChannel  _onGPSOnStream  = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys.onGPSOn);
+  static const EventChannel  _onGPSOffStream  = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys.onGPSOff);
 
-  static const EventChannel  _onBluetoothOnStream  = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys._onBluetoothOn);
-  static const EventChannel  _onBluetoothOffStream  = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys._onBluetoothOff);
+  static const EventChannel  _onBluetoothOnStream  = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys.onBluetoothOn);
+  static const EventChannel  _onBluetoothOffStream  = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys.onBluetoothOff);
 
-  static const EventChannel  _onBackgroundRefreshOnStream  = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys._onBackgroundRefreshOn);
-  static const EventChannel  _onBackgroundRefreshOffStream  = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys._onBackgroundRefreshOff);
+  static const EventChannel  _onBackgroundRefreshOnStream  = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys.onBackgroundRefreshOn);
+  static const EventChannel  _onBackgroundRefreshOffStream  = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys.onBackgroundRefreshOff);
 
-  static const EventChannel  _onLowPowerModeOnStream  = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys._onLowPowerModeOn);
-  static const EventChannel  _onLowPowerModeOffStream  = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys._onLowPowerModeOff);
+  static const EventChannel  _onLowPowerModeOnStream  = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys.onLowPowerModeOn);
+  static const EventChannel  _onLowPowerModeOffStream  = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys.onLowPowerModeOff);
 
-  static const EventChannel  _onPushNotificationOnStream  = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys._onPushNotificationOn);
-  static const EventChannel  _onPushNotificationOffStream  = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys._onPushNotificationOff);
+  static const EventChannel  _onPushNotificationOnStream  = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys.onPushNotificationOn);
+  static const EventChannel  _onPushNotificationOffStream  = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys.onPushNotificationOff);
 
-  static const EventChannel  _onWifiOnStream  = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys._onWifiOn);
-  static const EventChannel  _onWifiOffStream = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys._onWifiOff);
+  static const EventChannel  _onWifiOnStream  = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys.onWifiOn);
+  static const EventChannel  _onWifiOffStream = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys.onWifiOff);
 
   /// Init Connectivity Sensor with ConnectivitySensorConfig
   ConnectivitySensor(ConnectivitySensorConfig config):this.convenience(config);
   ConnectivitySensor.convenience(config) : super(config){
     /// Set sensor method & event channels
-    super.setSensorChannels(_connectivityMethod, _connectivityStream);
+    super.setMethodChannel(_connectivityMethod);
   }
 
   /// A sensor observer instance
-  Stream<Map<String,dynamic>> get onDataChanged {
-     return super.receiveBroadcastStream("on_data_changed").map((dynamic event) => Map<String,dynamic>.from(event));
+  Stream<Map<String,dynamic>> onDataChanged(String id) {
+     return super.getBroadcastStream(_connectivityStream, "on_data_changed", id).map((dynamic event) => Map<String,dynamic>.from(event));
   }
 
-  Stream<dynamic> get onInternetOn{
-    return _onInternetOnStream.receiveBroadcastStream([ConnectivityKeys._onInternetOn]);
+  Stream<dynamic> onInternetOn(String id){
+    return super.getBroadcastStream(_onInternetOnStream, ConnectivityKeys.onInternetOn, id);
+    // return _onInternetOnStream.receiveBroadcastStream([]);
   }
 
-  Stream<dynamic> get onInternetOff{
-    return _onInternetOffStream.receiveBroadcastStream([ConnectivityKeys._onInternetOff]);
+  Stream<dynamic> onInternetOff(String id){
+    return super.getBroadcastStream(_onInternetOffStream, ConnectivityKeys.onInternetOff, id);
   }
 
-  Stream<dynamic> get onGPSOn{
-    return _onGPSOnStream.receiveBroadcastStream([ConnectivityKeys._onGPSOn]);
+  Stream<dynamic> onGPSOn(String id){
+    return super.getBroadcastStream(_onGPSOnStream, ConnectivityKeys.onGPSOn, id);
   }
 
-  Stream<dynamic> get onGPSOff {
-    return _onGPSOffStream.receiveBroadcastStream([ConnectivityKeys._onGPSOff]);
+  Stream<dynamic> onGPSOff(String id){
+    return super.getBroadcastStream(_onGPSOffStream, ConnectivityKeys.onGPSOff, id);
   }
 
-  Stream<dynamic> get onBluetoothOnStream {
-    return _onBluetoothOnStream.receiveBroadcastStream([ConnectivityKeys._onBluetoothOn]);
+  Stream<dynamic> onBluetoothOnStream(String id) {
+    return super.getBroadcastStream(_onBluetoothOnStream, ConnectivityKeys.onBluetoothOn, id);
   }
 
-  Stream<dynamic> get onBluetoothOffStream {
-    return _onBluetoothOffStream.receiveBroadcastStream([ConnectivityKeys._onBluetoothOff]);
+  Stream<dynamic> onBluetoothOffStream(String id) {
+    return super.getBroadcastStream(_onBluetoothOffStream, ConnectivityKeys.onBluetoothOff, id);
   }
   
-  Stream<dynamic> get onBackgroundRefreshOn {
-    return _onBackgroundRefreshOnStream.receiveBroadcastStream([ConnectivityKeys._onBackgroundRefreshOn]);
+  Stream<dynamic> onBackgroundRefreshOn(String id) {
+    return super.getBroadcastStream(_onBackgroundRefreshOnStream, ConnectivityKeys.onBackgroundRefreshOn, id);
   }
 
-  Stream<dynamic> get onBackgroundRefreshOff {
-    return _onBackgroundRefreshOffStream.receiveBroadcastStream([ConnectivityKeys._onBackgroundRefreshOff]);
+  Stream<dynamic> onBackgroundRefreshOff(String id) {
+    return super.getBroadcastStream(_onBackgroundRefreshOffStream, ConnectivityKeys.onBackgroundRefreshOff, id);
   }
 
-  Stream<dynamic> get onLowPowerModeOn {
-    return _onLowPowerModeOnStream.receiveBroadcastStream([ConnectivityKeys._onLowPowerModeOn]);
+  Stream<dynamic> onLowPowerModeOn(String id) {
+    return super.getBroadcastStream(_onLowPowerModeOnStream, ConnectivityKeys.onLowPowerModeOn, id);
   }
 
-  Stream<dynamic> get onLowPowerModeOff {
-    return _onLowPowerModeOffStream.receiveBroadcastStream([ConnectivityKeys._onLowPowerModeOff]);
+  Stream<dynamic> onLowPowerModeOff(String id) {
+    return super.getBroadcastStream(_onLowPowerModeOffStream, ConnectivityKeys.onLowPowerModeOff, id);
   }
 
-  Stream<dynamic> get onPushNotificationOn {
-    return _onPushNotificationOnStream.receiveBroadcastStream([ConnectivityKeys._onPushNotificationOn]);
+  Stream<dynamic> onPushNotificationOn(String id) {
+    return super.getBroadcastStream(_onPushNotificationOnStream, ConnectivityKeys.onPushNotificationOn, id);
   }
 
-  Stream<dynamic> get onPushNotificationOff {
-    return _onPushNotificationOffStream.receiveBroadcastStream([ConnectivityKeys._onPushNotificationOff]);
+  Stream<dynamic> onPushNotificationOff(String id) {
+    return super.getBroadcastStream(_onPushNotificationOffStream, ConnectivityKeys.onPushNotificationOff, id);
   }
 
-  Stream<dynamic> get onWifiOn {
-    return _onWifiOnStream.receiveBroadcastStream([ConnectivityKeys._onWifiOn]);
+  Stream<dynamic> onWifiOn(String id) {
+    return super.getBroadcastStream(_onWifiOnStream, ConnectivityKeys.onWifiOn, id);
   }
 
-  Stream<dynamic> get onWifiOff {
-    return _onWifiOffStream.receiveBroadcastStream([ConnectivityKeys._onWifiOff]);
+  Stream<dynamic> onWifiOff(String id) {
+    return super.getBroadcastStream(_onWifiOffStream, ConnectivityKeys.onWifiOff, id);
   }
-
-
 
 }
 
 class ConnectivitySensorConfig extends AwareSensorConfig{
   ConnectivitySensorConfig();
-
-  /// TODO
 
   @override
   Map<String, dynamic> toMap() {
@@ -118,38 +115,14 @@ class ConnectivitySensorConfig extends AwareSensorConfig{
 
 /// Make an AwareWidget
 class ConnectivityCard extends StatefulWidget {
-  ConnectivityCard({Key key, @required this.sensor}) : super(key: key);
+  ConnectivityCard({Key key, @required this.sensor, this.cardId = "connectivity_card"}) : super(key: key);
 
   ConnectivitySensor sensor;
+  String cardId;
 
   @override
   ConnectivityCardState createState() => new ConnectivityCardState();
 }
-
-
-class ConnectivityKeys {
-  static const String _onInternetOn = "on_internet_on";
-  static const String _onInternetOff = "on_internet_off";
-
-  static const String _onGPSOn  = "on_gps_on";
-  static const String _onGPSOff = "on_gps_off";
-
-  static const String _onBluetoothOn = "on_bluetooth_on";
-  static const String _onBluetoothOff = "on_bluetooth_off";
-
-  static const String _onBackgroundRefreshOn = "on_background_refresh_on";
-  static const String _onBackgroundRefreshOff = "on_background_refresh_off";
-
-  static const String _onLowPowerModeOn = "on_low_power_mode_on";
-  static const String _onLowPowerModeOff = "on_low_power_mode_off";
-
-  static const String _onPushNotificationOn = "on_push_notification_on";
-  static const String _onPushNotificationOff = "on_push_notification_off";
-
-  static const String _onWifiOn = "on_wifi_on";
-  static const String _onWifiOff = "on_wifi_off";
-}
-
 
 class ConnectivityCardState extends State<ConnectivityCard> {
 
@@ -166,46 +139,46 @@ class ConnectivityCardState extends State<ConnectivityCard> {
 
     super.initState();
     // set observer
-    widget.sensor.onInternetOn.listen((event) {
+    widget.sensor.onInternetOn(widget.cardId + "_internet_on").listen((event) {
       setState((){  internet = "on";  });
     });
-    widget.sensor.onInternetOff.listen((event) {
+    widget.sensor.onInternetOff(widget.cardId + "_internet_off").listen((event) {
       setState((){  internet = "off"; });
     });
-    widget.sensor.onGPSOn.listen((event) {
+    widget.sensor.onGPSOn(widget.cardId + "_gps_on").listen((event) {
       setState((){  gps = "on"; });
     });
-    widget.sensor.onGPSOff.listen((event) {
+    widget.sensor.onGPSOff(widget.cardId + "_gps_off").listen((event) {
       setState((){  gps = "off"; });
     });
-    widget.sensor.onBluetoothOnStream.listen((event) {
+    widget.sensor.onBluetoothOnStream(widget.cardId + "_bluetooth_on").listen((event) {
       setState((){  bluetooth = "on"; });
     });
-    widget.sensor.onBluetoothOffStream.listen((event) {
+    widget.sensor.onBluetoothOffStream(widget.cardId + "_bluetooth_off").listen((event) {
       setState((){  bluetooth = "off"; });
     });
-    widget.sensor.onBackgroundRefreshOn.listen((event) {
+    widget.sensor.onBackgroundRefreshOn(widget.cardId + "_background_refresh_on").listen((event) {
       setState((){  background = "on"; });
     });
-    widget.sensor.onBackgroundRefreshOff.listen((event) {
+    widget.sensor.onBackgroundRefreshOff(widget.cardId + "_background_refresh_off").listen((event) {
       setState((){  background = "off";  });
     });
-    widget.sensor.onLowPowerModeOn.listen((event) {
+    widget.sensor.onLowPowerModeOn(widget.cardId + "_low_power_on").listen((event) {
       setState((){  lowPowerMode = "on"; });
     });
-    widget.sensor.onLowPowerModeOff.listen((event) {
+    widget.sensor.onLowPowerModeOff(widget.cardId + "_low_power_off").listen((event) {
       setState((){  lowPowerMode = "off"; });
     });
-    widget.sensor.onPushNotificationOn.listen((event) {
+    widget.sensor.onPushNotificationOn(widget.cardId + "_notification_on").listen((event) {
       setState((){  pushNotification = "on"; });
     });
-    widget.sensor.onPushNotificationOff.listen((event) {
+    widget.sensor.onPushNotificationOff(widget.cardId + "_notification_off").listen((event) {
       setState((){  pushNotification = "off"; });
     });
-    widget.sensor.onWifiOn.listen((event) {
+    widget.sensor.onWifiOn(widget.cardId + "_wifi_on").listen((event) {
       setState((){  wifi = "on"; });
     });
-    widget.sensor.onWifiOff.listen((event) {
+    widget.sensor.onWifiOff(widget.cardId + "_wifi_off").listen((event) {
       setState((){  wifi = "off"; });
     });
     // print(widget.sensor);
@@ -223,4 +196,48 @@ class ConnectivityCardState extends State<ConnectivityCard> {
     );
   }
 
+  @override
+  void dispose() {
+
+    widget.sensor.cancelBroadcastStream(widget.cardId + "_internet_on");
+    widget.sensor.cancelBroadcastStream(widget.cardId + "_internet_off");
+    widget.sensor.cancelBroadcastStream(widget.cardId + "_gps_on");
+    widget.sensor.cancelBroadcastStream(widget.cardId + "_gps_off");
+    widget.sensor.cancelBroadcastStream(widget.cardId + "_bluetooth_on");
+    widget.sensor.cancelBroadcastStream(widget.cardId + "_bluetooth_off");
+    widget.sensor.cancelBroadcastStream(widget.cardId + "_background_refresh_on");
+    widget.sensor.cancelBroadcastStream(widget.cardId + "_background_refresh_off");
+    widget.sensor.cancelBroadcastStream(widget.cardId + "_low_power_on");
+    widget.sensor.cancelBroadcastStream(widget.cardId + "_low_power_off");
+    widget.sensor.cancelBroadcastStream(widget.cardId + "_notification_on");
+    widget.sensor.cancelBroadcastStream(widget.cardId + "_notification_off");
+    widget.sensor.cancelBroadcastStream(widget.cardId + "_wifi_on");
+    widget.sensor.cancelBroadcastStream(widget.cardId + "_wifi_off");
+
+    super.dispose();
+  }
+
+}
+
+class ConnectivityKeys {
+  static const String onInternetOn = "on_internet_on";
+  static const String onInternetOff = "on_internet_off";
+
+  static const String onGPSOn  = "on_gps_on";
+  static const String onGPSOff = "on_gps_off";
+
+  static const String onBluetoothOn = "on_bluetooth_on";
+  static const String onBluetoothOff = "on_bluetooth_off";
+
+  static const String onBackgroundRefreshOn = "on_background_refresh_on";
+  static const String onBackgroundRefreshOff = "on_background_refresh_off";
+
+  static const String onLowPowerModeOn = "on_low_power_mode_on";
+  static const String onLowPowerModeOff = "on_low_power_mode_off";
+
+  static const String onPushNotificationOn = "on_push_notification_on";
+  static const String onPushNotificationOff = "on_push_notification_off";
+
+  static const String onWifiOn = "on_wifi_on";
+  static const String onWifiOff = "on_wifi_off";
 }

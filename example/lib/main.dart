@@ -26,6 +26,8 @@ class _MyAppState extends State<MyApp> {
 
     sensor = new ConnectivitySensor(config);
 
+    sensor.start();
+
   }
 
   @override

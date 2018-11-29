@@ -40,67 +40,85 @@ class ConnectivitySensor extends AwareSensorCore {
   }
 
   /// A sensor observer instance
-  Stream<Map<String,dynamic>> onDataChanged(String id) {
-     return super.getBroadcastStream(_connectivityStream, "on_data_changed", id).map((dynamic event) => Map<String,dynamic>.from(event));
+  Stream<Map<String,dynamic>> get onDataChanged {
+     return super.getBroadcastStream(_connectivityStream, "on_data_changed").map((dynamic event) => Map<String,dynamic>.from(event));
   }
 
-  Stream<dynamic> onInternetOn(String id){
-    return super.getBroadcastStream(_onInternetOnStream, ConnectivityKeys.onInternetOn, id);
+  Stream<dynamic> get onInternetOn{
+    return super.getBroadcastStream(_onInternetOnStream, ConnectivityKeys.onInternetOn);
     // return _onInternetOnStream.receiveBroadcastStream([]);
   }
 
-  Stream<dynamic> onInternetOff(String id){
-    return super.getBroadcastStream(_onInternetOffStream, ConnectivityKeys.onInternetOff, id);
+  Stream<dynamic> get onInternetOff{
+    return super.getBroadcastStream(_onInternetOffStream, ConnectivityKeys.onInternetOff);
   }
 
-  Stream<dynamic> onGPSOn(String id){
-    return super.getBroadcastStream(_onGPSOnStream, ConnectivityKeys.onGPSOn, id);
+  Stream<dynamic> get onGPSOn{
+    return super.getBroadcastStream(_onGPSOnStream, ConnectivityKeys.onGPSOn);
   }
 
-  Stream<dynamic> onGPSOff(String id){
-    return super.getBroadcastStream(_onGPSOffStream, ConnectivityKeys.onGPSOff, id);
+  Stream<dynamic> get onGPSOff{
+    return super.getBroadcastStream(_onGPSOffStream, ConnectivityKeys.onGPSOff);
   }
 
-  Stream<dynamic> onBluetoothOnStream(String id) {
-    return super.getBroadcastStream(_onBluetoothOnStream, ConnectivityKeys.onBluetoothOn, id);
+  Stream<dynamic> get onBluetoothOnStream {
+    return super.getBroadcastStream(_onBluetoothOnStream, ConnectivityKeys.onBluetoothOn);
   }
 
-  Stream<dynamic> onBluetoothOffStream(String id) {
-    return super.getBroadcastStream(_onBluetoothOffStream, ConnectivityKeys.onBluetoothOff, id);
+  Stream<dynamic> get onBluetoothOffStream{
+    return super.getBroadcastStream(_onBluetoothOffStream, ConnectivityKeys.onBluetoothOff);
   }
   
-  Stream<dynamic> onBackgroundRefreshOn(String id) {
-    return super.getBroadcastStream(_onBackgroundRefreshOnStream, ConnectivityKeys.onBackgroundRefreshOn, id);
+  Stream<dynamic> get onBackgroundRefreshOn {
+    return super.getBroadcastStream(_onBackgroundRefreshOnStream, ConnectivityKeys.onBackgroundRefreshOn);
   }
 
-  Stream<dynamic> onBackgroundRefreshOff(String id) {
-    return super.getBroadcastStream(_onBackgroundRefreshOffStream, ConnectivityKeys.onBackgroundRefreshOff, id);
+  Stream<dynamic> get onBackgroundRefreshOff{
+    return super.getBroadcastStream(_onBackgroundRefreshOffStream, ConnectivityKeys.onBackgroundRefreshOff);
   }
 
-  Stream<dynamic> onLowPowerModeOn(String id) {
-    return super.getBroadcastStream(_onLowPowerModeOnStream, ConnectivityKeys.onLowPowerModeOn, id);
+  Stream<dynamic> get onLowPowerModeOn{
+    return super.getBroadcastStream(_onLowPowerModeOnStream, ConnectivityKeys.onLowPowerModeOn);
   }
 
-  Stream<dynamic> onLowPowerModeOff(String id) {
-    return super.getBroadcastStream(_onLowPowerModeOffStream, ConnectivityKeys.onLowPowerModeOff, id);
+  Stream<dynamic> get onLowPowerModeOff {
+    return super.getBroadcastStream(_onLowPowerModeOffStream, ConnectivityKeys.onLowPowerModeOff);
   }
 
-  Stream<dynamic> onPushNotificationOn(String id) {
-    return super.getBroadcastStream(_onPushNotificationOnStream, ConnectivityKeys.onPushNotificationOn, id);
+  Stream<dynamic> get onPushNotificationOn {
+    return super.getBroadcastStream(_onPushNotificationOnStream, ConnectivityKeys.onPushNotificationOn);
   }
 
-  Stream<dynamic> onPushNotificationOff(String id) {
-    return super.getBroadcastStream(_onPushNotificationOffStream, ConnectivityKeys.onPushNotificationOff, id);
+  Stream<dynamic> get onPushNotificationOff {
+    return super.getBroadcastStream(_onPushNotificationOffStream, ConnectivityKeys.onPushNotificationOff);
   }
 
-  Stream<dynamic> onWifiOn(String id) {
-    return super.getBroadcastStream(_onWifiOnStream, ConnectivityKeys.onWifiOn, id);
+  Stream<dynamic> get onWifiOn {
+    return super.getBroadcastStream(_onWifiOnStream, ConnectivityKeys.onWifiOn);
   }
 
-  Stream<dynamic> onWifiOff(String id) {
-    return super.getBroadcastStream(_onWifiOffStream, ConnectivityKeys.onWifiOff, id);
+  Stream<dynamic> get onWifiOff {
+    return super.getBroadcastStream(_onWifiOffStream, ConnectivityKeys.onWifiOff);
   }
 
+
+  @override
+  void cancelAllEventChannels() {
+    super.cancelBroadcastStream(ConnectivityKeys.onInternetOn);
+    super.cancelBroadcastStream(ConnectivityKeys.onInternetOff);
+    super.cancelBroadcastStream(ConnectivityKeys.onGPSOn);
+    super.cancelBroadcastStream(ConnectivityKeys.onGPSOff);
+    super.cancelBroadcastStream(ConnectivityKeys.onBluetoothOn);
+    super.cancelBroadcastStream(ConnectivityKeys.onBluetoothOff);
+    super.cancelBroadcastStream(ConnectivityKeys.onBackgroundRefreshOn);
+    super.cancelBroadcastStream(ConnectivityKeys.onBackgroundRefreshOff);
+    super.cancelBroadcastStream(ConnectivityKeys.onLowPowerModeOn);
+    super.cancelBroadcastStream(ConnectivityKeys.onLowPowerModeOff);
+    super.cancelBroadcastStream(ConnectivityKeys.onPushNotificationOn);
+    super.cancelBroadcastStream(ConnectivityKeys.onPushNotificationOff);
+    super.cancelBroadcastStream(ConnectivityKeys.onWifiOn);
+    super.cancelBroadcastStream(ConnectivityKeys.onWifiOff);
+  }
 }
 
 class ConnectivitySensorConfig extends AwareSensorConfig{
@@ -115,16 +133,9 @@ class ConnectivitySensorConfig extends AwareSensorConfig{
 
 /// Make an AwareWidget
 class ConnectivityCard extends StatefulWidget {
-  ConnectivityCard({Key key, @required this.sensor, this.cardId = "connectivity_card"}) : super(key: key);
+  ConnectivityCard({Key key, @required this.sensor}) : super(key: key);
 
   ConnectivitySensor sensor;
-  String cardId;
-
-  @override
-  ConnectivityCardState createState() => new ConnectivityCardState();
-}
-
-class ConnectivityCardState extends State<ConnectivityCard> {
 
   String internet = "---";
   String gps = "---";
@@ -135,51 +146,57 @@ class ConnectivityCardState extends State<ConnectivityCard> {
   String wifi = "---";
 
   @override
+  ConnectivityCardState createState() => new ConnectivityCardState();
+}
+
+class ConnectivityCardState extends State<ConnectivityCard> {
+
+  @override
   void initState() {
 
     super.initState();
     // set observer
-    widget.sensor.onInternetOn(widget.cardId + "_internet_on").listen((event) {
-      setState((){  internet = "on";  });
+    widget.sensor.onInternetOn.listen((event) {
+      setState((){  widget.internet = "on";  });
     });
-    widget.sensor.onInternetOff(widget.cardId + "_internet_off").listen((event) {
-      setState((){  internet = "off"; });
+    widget.sensor.onInternetOff.listen((event) {
+      setState((){  widget.internet = "off"; });
     });
-    widget.sensor.onGPSOn(widget.cardId + "_gps_on").listen((event) {
-      setState((){  gps = "on"; });
+    widget.sensor.onGPSOn.listen((event) {
+      setState((){  widget.gps = "on"; });
     });
-    widget.sensor.onGPSOff(widget.cardId + "_gps_off").listen((event) {
-      setState((){  gps = "off"; });
+    widget.sensor.onGPSOff.listen((event) {
+      setState((){  widget.gps = "off"; });
     });
-    widget.sensor.onBluetoothOnStream(widget.cardId + "_bluetooth_on").listen((event) {
-      setState((){  bluetooth = "on"; });
+    widget.sensor.onBluetoothOnStream.listen((event) {
+      setState((){  widget.bluetooth = "on"; });
     });
-    widget.sensor.onBluetoothOffStream(widget.cardId + "_bluetooth_off").listen((event) {
-      setState((){  bluetooth = "off"; });
+    widget.sensor.onBluetoothOffStream.listen((event) {
+      setState((){  widget.bluetooth = "off"; });
     });
-    widget.sensor.onBackgroundRefreshOn(widget.cardId + "_background_refresh_on").listen((event) {
-      setState((){  background = "on"; });
+    widget.sensor.onBackgroundRefreshOn.listen((event) {
+      setState((){  widget.background = "on"; });
     });
-    widget.sensor.onBackgroundRefreshOff(widget.cardId + "_background_refresh_off").listen((event) {
-      setState((){  background = "off";  });
+    widget.sensor.onBackgroundRefreshOff.listen((event) {
+      setState((){  widget.background = "off";  });
     });
-    widget.sensor.onLowPowerModeOn(widget.cardId + "_low_power_on").listen((event) {
-      setState((){  lowPowerMode = "on"; });
+    widget.sensor.onLowPowerModeOn.listen((event) {
+      setState((){  widget.lowPowerMode = "on"; });
     });
-    widget.sensor.onLowPowerModeOff(widget.cardId + "_low_power_off").listen((event) {
-      setState((){  lowPowerMode = "off"; });
+    widget.sensor.onLowPowerModeOff.listen((event) {
+      setState((){  widget.lowPowerMode = "off"; });
     });
-    widget.sensor.onPushNotificationOn(widget.cardId + "_notification_on").listen((event) {
-      setState((){  pushNotification = "on"; });
+    widget.sensor.onPushNotificationOn.listen((event) {
+      setState((){  widget.pushNotification = "on"; });
     });
-    widget.sensor.onPushNotificationOff(widget.cardId + "_notification_off").listen((event) {
-      setState((){  pushNotification = "off"; });
+    widget.sensor.onPushNotificationOff.listen((event) {
+      setState((){  widget.pushNotification = "off"; });
     });
-    widget.sensor.onWifiOn(widget.cardId + "_wifi_on").listen((event) {
-      setState((){  wifi = "on"; });
+    widget.sensor.onWifiOn.listen((event) {
+      setState((){  widget.wifi = "on"; });
     });
-    widget.sensor.onWifiOff(widget.cardId + "_wifi_off").listen((event) {
-      setState((){  wifi = "off"; });
+    widget.sensor.onWifiOff.listen((event) {
+      setState((){  widget.wifi = "off"; });
     });
     // print(widget.sensor);
   }
@@ -189,7 +206,15 @@ class ConnectivityCardState extends State<ConnectivityCard> {
     return new AwareCard(
       contentWidget: SizedBox(
           width: MediaQuery.of(context).size.width*0.8,
-          child: new Text("Internet: $internet\nGPS: $gps\nBluetooth: $bluetooth\nBackground Refresh: $background\nLow-Power Mode: $lowPowerMode\nPush Notification: $pushNotification\nWiFi: $wifi"),
+          child: new Text(
+              "Internet: ${widget.internet}\n"
+              "GPS: ${widget.gps}\n"
+              "Bluetooth: ${widget.bluetooth}\n"
+              "Background Refresh: ${widget.background}\n"
+              "Low-Power Mode: ${widget.lowPowerMode}\n"
+              "Push Notification: ${widget.pushNotification}\n"
+              "WiFi: ${widget.wifi}"
+          ),
         ),
       title: "Connectivity",
       sensor: widget.sensor
@@ -198,22 +223,7 @@ class ConnectivityCardState extends State<ConnectivityCard> {
 
   @override
   void dispose() {
-
-    widget.sensor.cancelBroadcastStream(widget.cardId + "_internet_on");
-    widget.sensor.cancelBroadcastStream(widget.cardId + "_internet_off");
-    widget.sensor.cancelBroadcastStream(widget.cardId + "_gps_on");
-    widget.sensor.cancelBroadcastStream(widget.cardId + "_gps_off");
-    widget.sensor.cancelBroadcastStream(widget.cardId + "_bluetooth_on");
-    widget.sensor.cancelBroadcastStream(widget.cardId + "_bluetooth_off");
-    widget.sensor.cancelBroadcastStream(widget.cardId + "_background_refresh_on");
-    widget.sensor.cancelBroadcastStream(widget.cardId + "_background_refresh_off");
-    widget.sensor.cancelBroadcastStream(widget.cardId + "_low_power_on");
-    widget.sensor.cancelBroadcastStream(widget.cardId + "_low_power_off");
-    widget.sensor.cancelBroadcastStream(widget.cardId + "_notification_on");
-    widget.sensor.cancelBroadcastStream(widget.cardId + "_notification_off");
-    widget.sensor.cancelBroadcastStream(widget.cardId + "_wifi_on");
-    widget.sensor.cancelBroadcastStream(widget.cardId + "_wifi_off");
-
+    widget.sensor.cancelAllEventChannels();
     super.dispose();
   }
 

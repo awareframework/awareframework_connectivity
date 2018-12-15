@@ -1,6 +1,8 @@
 # Aware Connectivity
 
-TODO
+[![Build Status](https://travis-ci.org/awareframework/awareframework_connectivity.svg?branch=master)](https://travis-ci.org/awareframework/awareframework_connectivity)
+
+The Connectivity sensor provides information on the network sensors availability of the device.
 
 ## Install the plugin into project
 1. Edit `pubspec.yaml`
@@ -16,13 +18,14 @@ import 'package:awareframework_core/awareframework_core.dart';
 ```
 
 ## Public functions
-### connectivity Sensor
+### Connectivity Sensor
 - `start()`
 - `stop()` 
-- `sync(force: Boolean)`
+- `sync(boolean force)`
 - `enable()`
 - `disable()`
 - `isEnable()`
+- `setLabel(String label)`
 
 ### Configuration Keys
 TODO
@@ -52,12 +55,12 @@ var config = ConnectivitySensorConfig()
 // init sensor
 var sensor = new ConnectivitySensor(config);
 
-void mathod(){
+void method(){
     /// start 
     sensor.start();
     
     /// set observer
-    sensor.onDataChanged.listen((Map<String,dynamic> result){
+    sensor.onInternetOn.listen((event){
       setState((){
         // Your code here
       });
@@ -67,7 +70,7 @@ void mathod(){
     sensor.stop();
     
     /// sync
-    sensor.sync(true);  
+    sensor.sync();
     
     // make a sensor care by the following code
     var card = new ConnectivityCard(sensor:sensor);

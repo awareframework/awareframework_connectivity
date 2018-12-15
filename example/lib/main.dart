@@ -24,7 +24,7 @@ class _MyAppState extends State<MyApp> {
     config = ConnectivitySensorConfig()
       ..debug = true;
 
-    sensor = new ConnectivitySensor(config);
+    sensor = new ConnectivitySensor.init(config);
 
     sensor.start();
 

@@ -5,8 +5,50 @@ import 'package:awareframework_core/awareframework_core.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
-/// init sensor
-class ConnectivitySensor extends AwareSensorCore {
+
+/// The Connectivity measures the acceleration applied to the sensor
+/// built-in into the device, including the force of gravity.
+///
+/// Your can initialize this class by the following code.
+/// ```dart
+/// var sensor = ConnectivitySensor();
+/// ```
+///
+/// If you need to initialize the sensor with configurations,
+/// you can use the following code instead of the above code.
+/// ```dart
+/// var config =  ConnectivitySensorConfig();
+/// config
+///   ..debug = true
+///   ..frequency = 100;
+///
+/// var sensor = ConnectivitySensor.init(config);
+/// ```
+///
+/// Each sub class of AwareSensor provides the following method for controlling
+/// the sensor:
+/// - `start()`
+/// - `stop()`
+/// - `enable()`
+/// - `disable()`
+/// - `sync()`
+/// - `setLabel(String label)`
+///
+/// `Stream<ConnectivityData>` allow us to monitor the sensor update
+/// events as follows:
+///
+/// ```dart
+/// sensor.onDataChanged.listen((data) {
+///   print(data)
+/// }
+/// ```
+///
+/// In addition, this package support data visualization function on Cart Widget.
+/// You can generate the Cart Widget by following code.
+/// ```dart
+/// var card = ConnectivityCard(sensor: sensor);
+/// ```
+class ConnectivitySensor extends AwareSensor {
 
   static const MethodChannel _connectivityMethod = const MethodChannel('awareframework_connectivity/method');
   static const EventChannel  _connectivityStream  = const EventChannel('awareframework_connectivity/event');
@@ -32,78 +74,223 @@ class ConnectivitySensor extends AwareSensorCore {
   static const EventChannel  _onWifiOnStream  = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys.onWifiOn);
   static const EventChannel  _onWifiOffStream = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys.onWifiOff);
 
+
+  static StreamController<dynamic> connectivityStreamController = StreamController<dynamic>();
+
+  static StreamController<dynamic> onInternetOnStreamController= StreamController<dynamic>();
+  static StreamController<dynamic> onInternetOffStreamController= StreamController<dynamic>();
+
+  static StreamController<dynamic> onGPSOnStreamController= StreamController<dynamic>();
+  static StreamController<dynamic> onGPSOffStreamController= StreamController<dynamic>();
+
+  static StreamController<dynamic> onBluetoothOnStreamController= StreamController<dynamic>();
+  static StreamController<dynamic> onBluetoothOffStreamController= StreamController<dynamic>();
+
+  static StreamController<dynamic> onBackgroundRefreshOnStreamController= StreamController<dynamic>();
+  static StreamController<dynamic> onBackgroundRefreshOffStreamController= StreamController<dynamic>();
+
+  static StreamController<dynamic>  onLowPowerModeOnStreamController= StreamController<dynamic>();
+  static StreamController<dynamic>  onLowPowerModeOffStreamController= StreamController<dynamic>();
+
+  static StreamController<dynamic> onPushNotificationOnStreamController= StreamController<dynamic>();
+  static StreamController<dynamic> onPushNotificationOffStreamController= StreamController<dynamic>();
+
+  static StreamController<dynamic>  onWifiOnStreamController= StreamController<dynamic>();
+  static StreamController<dynamic>  onWifiOffStreamController= StreamController<dynamic>();
+
+  bool internet = false;
+  bool gps      = false;
+  bool bluetooth = false;
+  bool background = false;
+  bool lowPowerMode = false;
+  bool pushNotification = false;
+  bool wifi = false;
+
+  /// Init Connectivity Sensor without a configuration file
+  ///
+  /// ```dart
+  /// var sensor = ConnectivitySensor.init(null);
+  /// ```
+  ConnectivitySensor():this.init(null);
+
   /// Init Connectivity Sensor with ConnectivitySensorConfig
-  ConnectivitySensor(ConnectivitySensorConfig config):this.convenience(config);
-  ConnectivitySensor.convenience(config) : super(config){
-    /// Set sensor method & event channels
+  ///
+  /// ```dart
+  /// var config =  ConnectivitySensorConfig();
+  /// config
+  ///   ..debug = true
+  ///   ..frequency = 100;
+  ///
+  /// var sensor = ConnectivitySensor.init(config);
+  /// ```
+  ConnectivitySensor.init(ConnectivitySensorConfig config) : super(config){
+    /// Set sensor method
     super.setMethodChannel(_connectivityMethod);
   }
 
-  /// A sensor observer instance
-  Stream<Map<String,dynamic>> get onDataChanged {
-     return super.getBroadcastStream(_connectivityStream, "on_data_changed").map((dynamic event) => Map<String,dynamic>.from(event));
+  /// An event channel for monitoring connectivity events.
+  ///
+  /// `Stream<dynamic>` allow us to monitor connectivity events
+  /// events as follows:
+  ///
+  /// ```dart
+  /// sensor.onInternetOn.listen((event) {
+  ///
+  /// }
+  ///
+  StreamController<dynamic> initStreamController(StreamController<dynamic> controller){
+    controller.close();
+    controller = StreamController<dynamic>();
+    return controller;
   }
 
   Stream<dynamic> get onInternetOn{
-    return super.getBroadcastStream(_onInternetOnStream, ConnectivityKeys.onInternetOn);
-    // return _onInternetOnStream.receiveBroadcastStream([]);
+    return initStreamController(onInternetOnStreamController).stream;
   }
 
   Stream<dynamic> get onInternetOff{
-    return super.getBroadcastStream(_onInternetOffStream, ConnectivityKeys.onInternetOff);
+    return initStreamController(onInternetOffStreamController).stream;
   }
 
   Stream<dynamic> get onGPSOn{
-    return super.getBroadcastStream(_onGPSOnStream, ConnectivityKeys.onGPSOn);
+    return initStreamController(onGPSOnStreamController).stream;
   }
 
   Stream<dynamic> get onGPSOff{
-    return super.getBroadcastStream(_onGPSOffStream, ConnectivityKeys.onGPSOff);
+    return initStreamController(onGPSOffStreamController).stream;
   }
 
   Stream<dynamic> get onBluetoothOnStream {
-    return super.getBroadcastStream(_onBluetoothOnStream, ConnectivityKeys.onBluetoothOn);
+    return initStreamController(onBluetoothOnStreamController).stream;
   }
 
   Stream<dynamic> get onBluetoothOffStream{
-    return super.getBroadcastStream(_onBluetoothOffStream, ConnectivityKeys.onBluetoothOff);
+    return initStreamController(onBluetoothOffStreamController).stream;
   }
   
   Stream<dynamic> get onBackgroundRefreshOn {
-    return super.getBroadcastStream(_onBackgroundRefreshOnStream, ConnectivityKeys.onBackgroundRefreshOn);
+    return initStreamController(onBackgroundRefreshOnStreamController).stream;
   }
 
   Stream<dynamic> get onBackgroundRefreshOff{
-    return super.getBroadcastStream(_onBackgroundRefreshOffStream, ConnectivityKeys.onBackgroundRefreshOff);
+    return initStreamController(onBackgroundRefreshOffStreamController).stream;
   }
 
   Stream<dynamic> get onLowPowerModeOn{
-    return super.getBroadcastStream(_onLowPowerModeOnStream, ConnectivityKeys.onLowPowerModeOn);
+    return initStreamController(onLowPowerModeOnStreamController).stream;
   }
 
   Stream<dynamic> get onLowPowerModeOff {
-    return super.getBroadcastStream(_onLowPowerModeOffStream, ConnectivityKeys.onLowPowerModeOff);
+    return initStreamController(onLowPowerModeOffStreamController).stream;
   }
 
   Stream<dynamic> get onPushNotificationOn {
-    return super.getBroadcastStream(_onPushNotificationOnStream, ConnectivityKeys.onPushNotificationOn);
+    return initStreamController(onPushNotificationOnStreamController).stream;
   }
 
   Stream<dynamic> get onPushNotificationOff {
-    return super.getBroadcastStream(_onPushNotificationOffStream, ConnectivityKeys.onPushNotificationOff);
+    return initStreamController(onPushNotificationOffStreamController).stream;
   }
 
   Stream<dynamic> get onWifiOn {
-    return super.getBroadcastStream(_onWifiOnStream, ConnectivityKeys.onWifiOn);
+    return initStreamController(onWifiOnStreamController).stream;
   }
 
   Stream<dynamic> get onWifiOff {
-    return super.getBroadcastStream(_onWifiOffStream, ConnectivityKeys.onWifiOff);
+    return initStreamController(onWifiOffStreamController).stream;
   }
 
+  @override
+  Future<Null> start() {
+    super.getBroadcastStream(_onInternetOnStream, ConnectivityKeys.onInternetOn).listen((event){
+      if(!onInternetOnStreamController.isClosed){
+        internet = true;
+        onInternetOnStreamController.add(event);
+      }
+    });
+    super.getBroadcastStream(_onInternetOffStream, ConnectivityKeys.onInternetOff).listen((event){
+      if(!onInternetOffStreamController.isClosed){
+        internet = false;
+        onInternetOffStreamController.add(event);
+      }
+    });
+    super.getBroadcastStream(_onGPSOnStream, ConnectivityKeys.onGPSOn).listen((event){
+      if(!onGPSOnStreamController.isClosed){
+        gps = true;
+        onGPSOnStreamController.add(event);
+      }
+    });
+    super.getBroadcastStream(_onGPSOffStream, ConnectivityKeys.onGPSOff).listen((event){
+      if(!onGPSOffStreamController.isClosed){
+        gps = false;
+        onGPSOffStreamController.add(event);
+      }
+    });
+    super.getBroadcastStream(_onBluetoothOnStream, ConnectivityKeys.onBluetoothOn).listen((event){
+      if(!onBluetoothOnStreamController.isClosed){
+        bluetooth = true;
+        onBluetoothOnStreamController.add(event);
+      }
+    });
+    super.getBroadcastStream(_onBluetoothOffStream, ConnectivityKeys.onBluetoothOff).listen((event){
+      if(!onBluetoothOffStreamController.isClosed){
+        bluetooth = false;
+        onBluetoothOffStreamController.add(event);
+      }
+    });
+    super.getBroadcastStream(_onBackgroundRefreshOnStream, ConnectivityKeys.onBackgroundRefreshOn).listen((event){
+      if(!onBackgroundRefreshOnStreamController.isClosed){
+        background = true;
+        onBackgroundRefreshOnStreamController.add(event);
+      }
+    });
+    super.getBroadcastStream(_onBackgroundRefreshOffStream, ConnectivityKeys.onBackgroundRefreshOff).listen((event){
+      if(!onBackgroundRefreshOffStreamController.isClosed){
+        background = false;
+        onBackgroundRefreshOffStreamController.add(event);
+      }
+    });
+    super.getBroadcastStream(_onLowPowerModeOnStream, ConnectivityKeys.onLowPowerModeOn).listen((event){
+      if(!onLowPowerModeOnStreamController.isClosed){
+        lowPowerMode = true;
+        onLowPowerModeOnStreamController.add(event);
+      }
+    });
+    super.getBroadcastStream(_onLowPowerModeOffStream, ConnectivityKeys.onLowPowerModeOff).listen((event){
+      if(!onLowPowerModeOffStreamController.isClosed){
+        lowPowerMode = false;
+        onLowPowerModeOffStreamController.add(event);
+      }
+    });
+    super.getBroadcastStream(_onPushNotificationOnStream, ConnectivityKeys.onPushNotificationOn).listen((event){
+      if(!onPushNotificationOnStreamController.isClosed){
+        pushNotification = true;
+        onPushNotificationOnStreamController.add(event);
+      }
+    });
+    super.getBroadcastStream(_onPushNotificationOffStream, ConnectivityKeys.onPushNotificationOff).listen((event){
+      if(!onPushNotificationOffStreamController.isClosed){
+        pushNotification = false;
+        onPushNotificationOffStreamController.add(event);
+      }
+    });
+    super.getBroadcastStream(_onWifiOnStream, ConnectivityKeys.onWifiOn).listen((event){
+      if(!onWifiOnStreamController.isClosed){
+        wifi = true;
+        onWifiOnStreamController.add(event);
+      }
+    });
+    super.getBroadcastStream(_onWifiOffStream, ConnectivityKeys.onWifiOff).listen((event){
+      if(!onWifiOffStreamController.isClosed){
+        wifi = false;
+        onWifiOffStreamController.add(event);
+      }
+    });
+    return super.start();
+  }
 
   @override
-  void cancelAllEventChannels() {
+  Future<Null> stop() {
     super.cancelBroadcastStream(ConnectivityKeys.onInternetOn);
     super.cancelBroadcastStream(ConnectivityKeys.onInternetOff);
     super.cancelBroadcastStream(ConnectivityKeys.onGPSOn);
@@ -118,9 +305,21 @@ class ConnectivitySensor extends AwareSensorCore {
     super.cancelBroadcastStream(ConnectivityKeys.onPushNotificationOff);
     super.cancelBroadcastStream(ConnectivityKeys.onWifiOn);
     super.cancelBroadcastStream(ConnectivityKeys.onWifiOff);
+    return super.stop();
   }
 }
 
+
+/// A configuration class of ConnectivitySensor
+///
+/// You can initialize the class by following code.
+///
+/// ```dart
+/// var config =  ConnectivitySensorConfig();
+/// config
+///   ..debug = true
+///   ..frequency = 100;
+/// ```
 class ConnectivitySensorConfig extends AwareSensorConfig{
   ConnectivitySensorConfig();
 
@@ -131,19 +330,23 @@ class ConnectivitySensorConfig extends AwareSensorConfig{
   }
 }
 
-/// Make an AwareWidget
+/// A data model of ConnectivitySensor
+///
+/// This class converts sensor data that is Map<String,dynamic> format, to a
+/// sensor data object.
+///
 class ConnectivityCard extends StatefulWidget {
   ConnectivityCard({Key key, @required this.sensor}) : super(key: key);
 
   ConnectivitySensor sensor;
 
-  String internet = "---";
-  String gps = "---";
-  String bluetooth = "---";
+  String internet   = "---";
+  String gps        = "---";
+  String bluetooth  = "---";
   String background = "---";
-  String lowPowerMode = "---";
+  String lowPowerMode     = "---";
   String pushNotification = "---";
-  String wifi = "---";
+  String wifi       = "---";
 
   @override
   ConnectivityCardState createState() => new ConnectivityCardState();
@@ -219,12 +422,6 @@ class ConnectivityCardState extends State<ConnectivityCard> {
       title: "Connectivity",
       sensor: widget.sensor
     );
-  }
-
-  @override
-  void dispose() {
-    widget.sensor.cancelAllEventChannels();
-    super.dispose();
   }
 
 }

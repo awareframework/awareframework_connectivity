@@ -1,7 +1,7 @@
 name: awareframework_connectivity
 description: The Connectivity sensor provides information on the network sensors availability of the device.
 version: 0.0.4
-author: AWARE Mobile Context Instrumentation Middleware Framework
+author: AWARE Mobile Context Instrumentation Middleware Framework <yuuki.nishiyama@oulu.fi>
 homepage: http://www.awareframework.com
 
 environment:

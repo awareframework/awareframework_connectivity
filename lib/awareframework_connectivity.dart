@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:awareframework_core/awareframework_core.dart';
 import 'package:flutter/material.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 
 
 /// The Connectivity measures the acceleration applied to the sensor
@@ -51,7 +50,7 @@ import 'package:charts_flutter/flutter.dart' as charts;
 class ConnectivitySensor extends AwareSensor {
 
   static const MethodChannel _connectivityMethod = const MethodChannel('awareframework_connectivity/method');
-  static const EventChannel  _connectivityStream  = const EventChannel('awareframework_connectivity/event');
+//  static const EventChannel  _connectivityStream  = const EventChannel('awareframework_connectivity/event');
 
   static const EventChannel  _onInternetOnStream  = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys.onInternetOn);
   static const EventChannel  _onInternetOffStream  = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys.onInternetOff);
@@ -75,7 +74,7 @@ class ConnectivitySensor extends AwareSensor {
   static const EventChannel  _onWifiOffStream = const EventChannel('awareframework_connectivity/event_'+ConnectivityKeys.onWifiOff);
 
 
-  static StreamController<dynamic> connectivityStreamController = StreamController<dynamic>();
+//  static StreamController<dynamic> connectivityStreamController = StreamController<dynamic>();
 
   static StreamController<dynamic> onInternetOnStreamController= StreamController<dynamic>();
   static StreamController<dynamic> onInternetOffStreamController= StreamController<dynamic>();
@@ -338,7 +337,13 @@ class ConnectivitySensorConfig extends AwareSensorConfig{
 class ConnectivityCard extends StatefulWidget {
   ConnectivityCard({Key key, @required this.sensor}) : super(key: key);
 
-  ConnectivitySensor sensor;
+  final ConnectivitySensor sensor;
+
+  @override
+  ConnectivityCardState createState() => new ConnectivityCardState();
+}
+
+class ConnectivityCardState extends State<ConnectivityCard> {
 
   String internet   = "---";
   String gps        = "---";
@@ -349,57 +354,94 @@ class ConnectivityCard extends StatefulWidget {
   String wifi       = "---";
 
   @override
-  ConnectivityCardState createState() => new ConnectivityCardState();
-}
-
-class ConnectivityCardState extends State<ConnectivityCard> {
-
-  @override
   void initState() {
 
     super.initState();
+
+    if(widget.sensor.internet){
+      internet = "on";
+    }else{
+      internet = "off";
+    }
+
+    if(widget.sensor.gps){
+      gps = "on";
+    }else{
+      gps = "off";
+    }
+
+    if(widget.sensor.bluetooth){
+      bluetooth = "on";
+    }else{
+      bluetooth = "off";
+    }
+
+    if(widget.sensor.background){
+      background = "on";
+    }else{
+      background = "off";
+    }
+
+    if(widget.sensor.lowPowerMode){
+      lowPowerMode = "on";
+    }else{
+      lowPowerMode = "off";
+    }
+
+    if(widget.sensor.pushNotification){
+      pushNotification = "on";
+    }else{
+      pushNotification = "off";
+    }
+
+    if(widget.sensor.wifi){
+      wifi = "on";
+    }else{
+      wifi = "off";
+    }
+
     // set observer
     widget.sensor.onInternetOn.listen((event) {
-      setState((){  widget.internet = "on";  });
+      setState((){  internet = "on";  });
     });
     widget.sensor.onInternetOff.listen((event) {
-      setState((){  widget.internet = "off"; });
+      setState((){  internet = "off"; });
     });
     widget.sensor.onGPSOn.listen((event) {
-      setState((){  widget.gps = "on"; });
+      setState((){  gps = "on"; });
     });
     widget.sensor.onGPSOff.listen((event) {
-      setState((){  widget.gps = "off"; });
+      setState((){  gps = "off"; });
     });
     widget.sensor.onBluetoothOnStream.listen((event) {
-      setState((){  widget.bluetooth = "on"; });
+      setState((){  bluetooth = "on"; });
     });
     widget.sensor.onBluetoothOffStream.listen((event) {
-      setState((){  widget.bluetooth = "off"; });
+      setState((){  bluetooth = "off"; });
     });
     widget.sensor.onBackgroundRefreshOn.listen((event) {
-      setState((){  widget.background = "on"; });
+      setState((){  background = "on"; });
     });
     widget.sensor.onBackgroundRefreshOff.listen((event) {
-      setState((){  widget.background = "off";  });
+      setState((){  background = "off";  });
     });
     widget.sensor.onLowPowerModeOn.listen((event) {
-      setState((){  widget.lowPowerMode = "on"; });
+      setState((){  lowPowerMode = "on"; });
     });
     widget.sensor.onLowPowerModeOff.listen((event) {
-      setState((){  widget.lowPowerMode = "off"; });
+      setState((){  lowPowerMode = "off"; });
     });
     widget.sensor.onPushNotificationOn.listen((event) {
-      setState((){  widget.pushNotification = "on"; });
+      setState((){  pushNotification = "on"; });
     });
     widget.sensor.onPushNotificationOff.listen((event) {
-      setState((){  widget.pushNotification = "off"; });
+      setState((){  pushNotification = "off"; });
     });
     widget.sensor.onWifiOn.listen((event) {
-      setState((){  widget.wifi = "on"; });
+      setState((){  wifi = "on"; });
     });
     widget.sensor.onWifiOff.listen((event) {
-      setState((){  widget.wifi = "off"; });
+      setState((){  wifi = "off"; });
     });
     // print(widget.sensor);
   }
@@ -410,13 +452,13 @@ class ConnectivityCardState extends State<ConnectivityCard> {
       contentWidget: SizedBox(
           width: MediaQuery.of(context).size.width*0.8,
           child: new Text(
-              "Internet: ${widget.internet}\n"
-              "GPS: ${widget.gps}\n"
-              "Bluetooth: ${widget.bluetooth}\n"
-              "Background Refresh: ${widget.background}\n"
-              "Low-Power Mode: ${widget.lowPowerMode}\n"
-              "Push Notification: ${widget.pushNotification}\n"
-              "WiFi: ${widget.wifi}"
+              "Internet: $internet\n"
+              "GPS: $gps\n"
+              "Bluetooth: $bluetooth\n"
+              "Background Refresh: $background\n"
+              "Low-Power Mode: $lowPowerMode\n"
+              "Push Notification: $pushNotification\n"
+              "WiFi: $wifi"
           ),
         ),
       title: "Connectivity",

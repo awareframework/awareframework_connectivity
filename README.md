@@ -53,7 +53,7 @@ var config = ConnectivitySensorConfig()
   ..label = "label";
 
 // init sensor
-var sensor = new ConnectivitySensor(config);
+var sensor = new ConnectivitySensor.init(config);
 
 void method(){
     /// start 
